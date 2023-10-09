@@ -8,11 +8,12 @@ class Particle {
     this.radius = Math.random() * (60 - 40) + 40;
     this.xSpeed = randomizeSpeed();
     this.ySpeed = randomizeSpeed();
+    this.color = "red";
   }
 
   render() {
     c.beginPath();
-    c.fillStyle = "red";
+    c.fillStyle = this.color;
     c.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
     c.fill();
   }
@@ -29,7 +30,6 @@ class Particle {
       this.ySpeed *= -1;
     }
   }
-  checkObjectCollision() {}
 }
 const particle1 = new Particle();
 const particle2 = new Particle();
@@ -49,6 +49,7 @@ function animate() {
   particle2.checkBorderCollision();
 
   drawLine(particle1X, particle1Y, particle2X, particle2Y);
+  checkObjectCollision();
 
   requestAnimationFrame(animate);
 }
@@ -65,4 +66,15 @@ function drawLine(x1, y1, x2, y2) {
   c.strokeStyle = "blue";
   c.lineWidth = 2;
   c.stroke();
+}
+
+function checkObjectCollision() {
+  let dx = particle2.x - particle1.x;
+  let dy = particle2.y - particle1.y;
+
+  let distance = Math.floor(Math.sqrt(dx * dx + dy * dy));
+  let sumOfRadii = Math.floor(particle1.radius + particle2.radius);
+  if (distance < sumOfRadii) {
+    particle1.color = "pink";
+  }
 }
